@@ -129,11 +129,15 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
 
  empRouter.get('/employee-project/:employeeId', async (req, res, next)=>{
     try {
-        const employees = await findEmployeeProjects();
+        const employeeId = req.params.employeeId;
+        const employees = await findEmployeeProjects(employeeId);
         res.status(200).json({employees: employees});
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
     }
  });
+
+ 
+
 module.exports = empRouter;
