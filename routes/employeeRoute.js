@@ -1,6 +1,6 @@
 const express = require('express');
 const empRouter = express.Router();
-const { insertEmployee, updateEmployee, getOneEmployee, getAllEmployees, deleteEmployee } = require('../controllers/employeeController');
+const { insertEmployee, updateEmployee, getOneEmployee, getAllEmployees, deleteEmployee, junctionCreate,findEmployeeProjects} = require('../controllers/employeeController');
 
 // Get all employees
 
@@ -42,16 +42,15 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
         const name = req.body.employee.name;
         const designation = req.body.employee.designation;
         const email = req.body.employee.email;
+        const contact = req.body.employee.contact;
         const age = req.body.employee.age;
-      
+        const companyId = req.body.employee.companyId;
               if (!name || !designation || !age) {
                 return res.sendStatus(400);
              }
   
-        const employee =  await insertEmployee(name, email, designation, age).then(() => res.json({ message: 'Employee created.' }));
-        
-        
-  
+        const employee =  await insertEmployee(name, email, designation, age, contact, companyId).then(() => res.json({ message: 'Employee created.' }));
+
     } catch(e){
         console.log(e);
         res.sendStatus(400);
@@ -64,9 +63,9 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
  empRouter.put('/:employeeId',  async (req, res, next)=>{
     try{
         const name = req.body.employee.name;
-        const position = req.body.employee.designation;
+        const designation = req.body.employee.designation;
         const email = req.body.employee.email;
-        const wage = req.body.employee.age;
+        const age = req.body.employee.age;
         const employeeId= req.params.employeeId;
   
               if (!name || !designation || !age) {
@@ -81,10 +80,7 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
         res.sendStatus(400);
     }
  });
-  
-  
-  
-  
+
  // Delete an employee
   
  empRouter.delete('/:employeeId', async (req, res, next)=>{
@@ -97,7 +93,47 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
         console.log(e);
     }
  })
+
+ empRouter.get('/:employeeId', async (req, res, next)=>{
+    try{
+        const employeeId = req.params.employeeId;
+        const response = await deleteEmployee(employeeId);
+        return res.sendStatus(204);
   
-  
-  
- module.exports = empRouter;
+    } catch(e){
+        console.log(e);
+    }
+ });
+
+
+ empRouter.post('/employee-project',  async (req, res, next)=>{
+    try{
+        const employeeId = req.body.employeeProject.EmployeeId;
+        const projectId = req.body.employeeProject.ProjectId;
+        console.log(employeeId);
+        console.log(projectId);
+         
+              if (!employeeId || !projectId) {
+                return res.sendStatus(400);
+             }
+   
+        const employeeProject =  await junctionCreate(employeeId, projectId).then(() => res.json({ message: 'Employee project created.' }));
+          
+          
+   
+    } catch(e){
+        console.log(e);
+        res.sendStatus(400);
+    }
+ });
+
+ empRouter.get('/employee-project/:employeeId', async (req, res, next)=>{
+    try {
+        const employees = await findEmployeeProjects();
+        res.status(200).json({employees: employees});
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+ });
+module.exports = empRouter;

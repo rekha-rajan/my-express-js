@@ -25,6 +25,22 @@ pool: {
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.Employee = require('../models/employee')(sequelize, Sequelize);
-sequelize.sync();
-module.exports = db;
+db.Company = require('../models/company.js')(sequelize, Sequelize);
+db.Profile = require('../models/profile.js')(sequelize, Sequelize);
+db.Project = require('../models/project.js')(sequelize, Sequelize);
 
+
+db.Employee.hasOne(db.Profile);
+db.Profile.belongsTo(db.Employee)
+
+db.Company.hasMany(db.Employee);
+db.Employee.belongsTo(db.Company) //db.Profile.belongsTo(db.Employee, { foreignKey: "employeeId" })
+
+
+db.Employee.belongsToMany(db.Project, { through: 'employee_project' });
+db.Project.belongsToMany(db.Employee, { through: 'employee_project' });
+
+db.Employee_Project = require('../models/employee_project.js')(sequelize, Sequelize, db.Employee, db.Project);
+
+sequelize.sync({alter:true});
+module.exports = db;                                                                    
