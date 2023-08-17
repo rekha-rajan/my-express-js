@@ -13,10 +13,12 @@ module.exports = {
     findEmployeeProjects,
     junctionCreate,
 };
-async function insertEmployee(name, email, designation, age, contact, companyId) {
-    const employee = await Employee.create({ name, designation, email, age, companyId });
-    const employeeId = employee.id;
+async function insertEmployee(name, email, designation, age, contact, companyId, projectName) {
+    const empData = await Employee.create({ name, designation, email, age, companyId });
+    const employeeId = empData.id;
     await Profile.create({ employeeId, name, email, contact });
+    const projectData = await Project.create({projectName});
+    await empData.addProject(projectData);
 }
 async function updateEmployee(name, designation, email, age, id) {
     await Employee.update({ name, designation, email, age }, { where: { id: id } });
@@ -37,10 +39,13 @@ async function getAllEmployees() {
     const employees = await Employee.findAll({
         include: [
             {
-                model: Profile,
-                attributes: ['email', 'contact'],
+                model: Project,
+                attributes: ["projectName"],
+                through: {
+                    attributes: ["EmployeeId", "ProjectId"],
+                }
             },
-        ]
+        ],
     });
 
     return employees;
@@ -56,7 +61,7 @@ async function findEmployeeProjects(id) {
         include: [
             {
                 model: Project,
-                attributes: ["name"],
+                attributes: ["projectName"],
                 through: {
                     attributes: ["EmployeeId", "ProjectId"],
                 }

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes, Employee, Project) => {
   },
   {
     tableName: "employee_project",
-    timestamps: false,
+    timestamps: true,
   });
   return Employee_Project;
 }

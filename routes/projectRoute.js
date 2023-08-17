@@ -7,11 +7,11 @@ const { insertProject} = require('../controllers/projectController');
 
 projectRouter.post('/', async (req, res, next) => {
     try {
-        const name = req.body.project.name;
-        if (!name) {
+        const projectName = req.body.project.projectName;
+        if (!projectName) {
             return res.sendStatus(400);
         }
-        const project = await insertProject(name).then(() => res.json({ message: 'Project created.' }));
+        const project = await insertProject(projectName).then(() => res.json({ message: 'Project created.' }));
     } catch (e) {
         console.log(e);
         res.sendStatus(400);

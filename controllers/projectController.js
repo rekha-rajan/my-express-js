@@ -3,6 +3,6 @@ const Profile = db.Project;
 module.exports = {
     insertProject,
 };
-async function insertProject(name) {
-    await Profile.create({name});
+async function insertProject(projectName) {
+    await Profile.create({projectName});
 }

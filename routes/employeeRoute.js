@@ -45,11 +45,12 @@ empRouter.param('employeeId', async (req, res, next, employeeId) => {
         const contact = req.body.employee.contact;
         const age = req.body.employee.age;
         const companyId = req.body.employee.companyId;
+        const projectName = req.body.employee.projectName
               if (!name || !designation || !age) {
                 return res.sendStatus(400);
              }
   
-        const employee =  await insertEmployee(name, email, designation, age, contact, companyId).then(() => res.json({ message: 'Employee created.' }));
+        const employee =  await insertEmployee(name, email, designation, age, contact, companyId, projectName).then(() => res.json({ message: 'Employee created.' }));
 
     } catch(e){
         console.log(e);
