@@ -12,7 +12,6 @@ module.exports = {
     deleteEmployee,
     findEmployeeProjects,
     junctionCreate,
-    findEmployeeProjects
 };
 async function insertEmployee(name, email, designation, age, contact, companyId) {
     const employee = await Employee.create({ name, designation, email, age, companyId });
@@ -74,19 +73,3 @@ async function junctionCreate(EmployeeId, ProjectId) {
     return employee_project;
 }
 
-async function findEmployeeProjects(id){
- 
-    const employee= await Employee.findByPk(id, {
-      include: [
-        {
-          model: Project,
-          attributes: ["name"],
-          through: {
-            attributes: ["EmployeeId", "ProjectId"],
-          }
-        },
-      ],
-    });
-    return employee;
-   }
-  

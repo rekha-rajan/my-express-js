@@ -1,6 +1,6 @@
 const express = require('express');
 const empRouter = express.Router();
-const { insertEmployee, updateEmployee, getOneEmployee, getAllEmployees, deleteEmployee, junctionCreate,findEmployeeProjects} = require('../controllers/employeeController');
+const { insertEmployee, updateEmployee, getOneEmployee, getAllEmployees, deleteEmployee, findEmployeeProjects,junctionCreate} = require('../controllers/employeeController');
 
 // Get all employees
 
